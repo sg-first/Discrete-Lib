@@ -7,4 +7,5 @@ SOURCES += \
         main.cpp
 
 HEADERS += \
-    graph.h
+    graph.h \
+    relation.h

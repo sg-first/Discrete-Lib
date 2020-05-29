@@ -1,5 +1,6 @@
 #include <iostream>
 #include "graph.h"
+#include "relation.h"
 using namespace std;
 
 int main()
