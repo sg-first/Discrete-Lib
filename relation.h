@@ -1,13 +1,13 @@
 #pragma once
 #include <utility>
-#include <vector>
+#include <set>
 #include <iostream>
 using namespace std;
 
 class relation
 {
 public:
-    vector< pair<int, int> > allPair;
+    set< pair<int, int> > allPair;
 
     relation() {}
     relation(const relation& r)
@@ -21,7 +21,7 @@ public:
 
     void addPair(int a, int b)
     {
-        allPair.push_back(make_pair(a, b));
+        allPair.insert(make_pair(a, b));
     }
 
     void output()
@@ -32,7 +32,7 @@ public:
 
     relation composite(const relation& r)
     {
-        //fix:this与r关系的复合，返回复合后的新关系
+        relation result(*this);
         for (auto i : this->allPair)
         {
             int a = i.second;
@@ -41,68 +41,56 @@ public:
             {
                 if (a == j.first)
                 {
-                    addPair(b, j.second);
+                    result.addPair(b, j.second); //result开始和this一样，所以前面都用this，这里修改就用result
                 }
             }
         }
-        output();
-        return *this;
-
+        return result;
     }
 
     bool isReflexivive()
     {
-        //fix:this是否是自反的
+        //fix:自反只是要求每个元素a都有<a,a>，不排斥有<a,b>，只要有<b,b>就行
         for (auto i : this->allPair)
         {
             if (i.first != i.second)
-            {
-                cout << "NO" << endl;
-                return  false;
-            }
+                return false;
         }
         return true;
     }
 
     bool isIrreflexive()
     {
-        //fix:this是否是反自反的
+        //fix:同上
         for (auto i : this->allPair)
         {
             if (i.first == i.second)
-            {
-                cout << "NO" << endl;
-                return  false;
-            }
+                return false;
         }
         return true;
     }
 
     bool isSymmetry()
     {
-        //fix:this是否是对称的
-        bool ss = false;
         for (auto i : this->allPair)
         {
             int a, b;
             a = i.first;
             b = i.second;
-            bool  ss =true;
+            bool flag=false;
             for (auto i : this->allPair)
             {
                 if (i.first == b && i.second == a)
-                {
-            
-                    ss = false;//false为对称关系；
-                }
+                    flag=true; //找到一个对称的就是对称
             }
+            if(flag==false)
+                return false;
         }
-        return ss;
+        return true;
     }
 
     bool isAntisymmetry()
     {
-        //fix:this是否是反对称的
         for (auto i : this->allPair)
         {
             int a, b;
@@ -111,9 +99,7 @@ public:
             for (auto i : this->allPair)
             {
                 if (i.first == b && i.second == a)
-                {
                     return false;
-                }
             }
         }
         return true;
@@ -146,5 +132,24 @@ public:
             }
         }
         return ss;
+    }
+
+    relation reflexiveClosure()
+    {
+        relation result(*this);
+        for (auto i : this->allPair)
+        {
+            result.addPair(i.first,i.first);
+            result.addPair(i.second,i.second);
+        }
+        return result;
+    }
+
+    relation symmetricClosure()
+    {
+        relation result(*this);
+        for (auto i : this->allPair)
+            result.addPair(i.second,i.first);
+        return result;
     }
 };
