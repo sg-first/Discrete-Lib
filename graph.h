@@ -225,10 +225,9 @@ public:
 
         while(nodeSet.size()!=allNodeSet.size())
         {
-            //fix:后面的代码需要填充
             set<int> diffSet=getSetDiff(allNodeSet,nodeSet); //计算量集合差集
             //fix:从差集中找到另一点b使得点b到集合nodeSet中任意一点的权值最小，此时将b点也加入集合V
-            //加入集合后还需对result图中的该节点setEdge，权值与this相同
+            //fix:加入集合后还需对result图中的该节点setEdge，权值与this相同
         }
 
         return result;
