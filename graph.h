@@ -2,6 +2,8 @@
 #include <vector>
 #include <stdio.h>
 #include <queue>
+#include <set>
+#include <algorithm>
 using namespace std;
 
 class graph
@@ -57,8 +59,10 @@ private:
     {
         queue<int> q;
         int q_top;
+
         if(ii==-1)
             printf("v%d->",start);
+
         visited[start] = true;
 
         //访问一个节点连接到的节点
@@ -85,7 +89,10 @@ private:
         {
             q_top = q.front();
             q.pop();
-            printf("v%d->",q_top);
+
+            if(ii==-1)
+                printf("v%d->",q_top);
+
             bool result=visitNode(q_top); //准备访问后面节点的队列
             if(result==true)
                 return true;
@@ -99,6 +106,13 @@ private:
         for(int i=0;i<this->nodeNum;i++)
             visited.push_back(false);
         return visited;
+    }
+
+    static set<int> getSetDiff(set<int> A, set<int> B)
+    {
+        set<int> C;
+        set_difference( A.begin(), A.end(),B.begin(), B.end(),inserter( C, C.begin() ) );
+        return C;
     }
 
 public:
@@ -200,9 +214,35 @@ public:
         return result;
     }
 
-    void output()
+    graph minimumSpanningTree() //Prim算法最小生成树
     {
-        //fix:输出图，格式自定（如果实在想不出来怎么画直接输出邻接矩阵也行）
+        graph result(this->nodeNum);
+        set<int> allNodeSet; //所有节点的集合
+        for(int i=0;i<this->nodeNum;i++)
+            allNodeSet.insert(i);
+        set<int> nodeSet; //结果树中已包含的节点集合
+        nodeSet.insert(0); //0作为起始点
+
+        while(nodeSet.size()!=allNodeSet.size())
+        {
+            //fix:后面的代码需要填充
+            set<int> diffSet=getSetDiff(allNodeSet,nodeSet); //计算量集合差集
+            //fix:从差集中找到另一点b使得点b到集合nodeSet中任意一点的权值最小，此时将b点也加入集合V
+            //加入集合后还需对result图中的该节点setEdge，权值与this相同
+        }
+
+        return result;
     }
 
+    void output()
+    {
+        for (unsigned int i = 0; i < this->nodeNum; i++)
+        {
+            for (unsigned int j = 0; j < this->nodeNum; j++)
+            {
+                printf("%g ", m[i][j]);
+            }
+            printf("\n");
+        }
+    }
 };
