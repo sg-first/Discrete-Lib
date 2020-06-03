@@ -16,7 +16,7 @@ int main()
     cin >> s >> g;
     B.addPair(s, g);
     A.output(); 
-    cout << "复合后结果：" << endl;
+    cout << "composite" << endl;
     A.composite(B);
     return 0;
 }

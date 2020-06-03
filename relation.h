@@ -17,6 +17,7 @@ public:
     relation& operator=(const relation& r)
     {
         this->allPair = r.allPair;
+        return *this;
     }
 
     void addPair(int a, int b)
@@ -107,8 +108,7 @@ public:
 
     bool isTransitivity()
     {
-        //fix:this是否是传递的
-        bool ss = false;
+        bool ss = false; //fix:永远返回false
         for (auto i : this->allPair)
         {
             int a, b;

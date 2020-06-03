@@ -4,6 +4,7 @@
 #include <queue>
 #include <set>
 #include <algorithm>
+#include <string>
 using namespace std;
 
 class graph
@@ -115,6 +116,92 @@ private:
         return C;
     }
 
+    void Dijkstra(int v) //找v到vi最短路径
+    {
+        vector< vector<int> > table; //Dijkstra表
+        vector< vector<int> > path; //存每行的路径（表头列）
+        for(int i=0;i<this->nodeNum;i++) //添加行向量
+        {
+            table.push_back(vector<int>());
+            path.push_back(vector<int>());
+        }
+        int gonePathLen=0; //已经走过的路径长度
+        //初始化第一行
+        path[0].push_back(v);
+        for(int i=0;i<this->nodeNum;i++)
+            table[0].push_back(this->m[0][i]); //把到自身的也放进里面去，但是不用（因为不支持添加只想自己的边所以不用特判）。这里注意，0代表长度为INF而不是最短
+        //找一行中最小值的函数
+        auto findMin=[&table,this](int sub)
+        {
+            int min=0;
+            int node=-1;
+            for(int i=0;i<this->nodeNum;i++)
+            {
+                if(table[sub][i]!=0) //有边
+                {
+                    if(table[sub][i]<min || min==0)
+                    {
+                        min=table[sub][i];
+                        node=i;
+                    }
+                }
+            }
+            return make_pair(min,node);
+        };
+        //判断元素是否存在于path[sub]中
+        auto isExist=[&path](int sub, int node)
+        {
+            for(int i : path[sub])
+            {
+                if(node==i)
+                    return true;
+            }
+            return false;
+        };
+        //填充后面的行
+        for(int ii=1;ii<this->nodeNum-1;ii++)
+        {
+            path[ii]=path[ii-1]; //基于上一行已经走到的节点继续走
+            //看看这一步往哪走
+            int min,node;
+            auto result=findMin(ii-1);
+            min=result.first;
+            node=result.second;
+            //根据这一步要走的节点更新
+            gonePathLen+=min;
+            path[ii].push_back(node);
+            //填充table
+            for(int i=0;i<this->nodeNum;i++)
+            {
+                int pushVal=0;
+                if(!isExist(ii,i)) //确认目前没走过这个点才能添加，否则添加0（不能重复走）
+                    pushVal=this->m[node][i]+gonePathLen;
+                table[ii].push_back(pushVal);
+            }
+        }
+        //竖着查table，找到每个节点的最短路径
+        for(int i=0;i<this->nodeNum;i++) //找每个节点的最短路径
+        {
+            int min=0;
+            for(int j=1;j<this->nodeNum;j++) //对每个节点访问每一行（因为要对第0行更新，所以从第一行开始查就行了）
+            {
+                if(table[j][i]!=0) //有边
+                {
+                    if(table[j][i]<min || min==0)
+                        min=table[j][i];
+                }
+            }
+            table[0][i]=min;
+        }
+        //记录结果
+        this->dijkstraV=v;
+        this->allShortPath=table[0];
+    }
+
+    //Dijkstra记忆化
+    int dijkstraV=-1;
+    vector<int> allShortPath;
+
 public:
     graph(int nodeNum) : nodeNum(nodeNum)
     {
@@ -146,6 +233,8 @@ public:
 
     void setEdge(int n1, int n2, int weight)
     {
+        if(n1==n2)
+            throw string("不支持自环");
         //无向图，两边都设
         this->m[n1][n2]=weight;
         this->m[n2][n1]=weight;
@@ -231,6 +320,13 @@ public:
         }
 
         return result;
+    }
+
+    int shortestPath(int v,int vi)
+    {
+        if(v!=this->dijkstraV)
+            this->Dijkstra(v);
+        return this->allShortPath[vi];
     }
 
     void output()
