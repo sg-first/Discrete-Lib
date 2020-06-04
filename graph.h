@@ -179,8 +179,8 @@ private:
                 table[ii].push_back(pushVal);
             }
         }
-        //竖着查table，找到每个节点的最短路径
-        for(int i=0;i<this->nodeNum;i++) //找每个节点的最短路径
+        //竖着查table，找到每个节点的最短路径长度并放在table[0]（因为要的是路径不是长度所以这里注释掉）
+        /*for(int i=0;i<this->nodeNum;i++) //找每个节点的最短路径
         {
             int min=0;
             for(int j=1;j<this->nodeNum;j++) //对每个节点访问每一行（因为要对第0行更新，所以从第一行开始查就行了）
@@ -195,12 +195,21 @@ private:
         }
         //记录结果
         this->dijkstraV=v;
-        this->allShortPath=table[0];
+        this->allShortPath=table[0];*/
+
+        this->allShortPath.clear();
+        for(int i=0;i<this->nodeNum;i++)
+            this->allShortPath.push_back(vector<int>());
+        for(vector<int> i : path)
+        {
+            int node=*(i.end()); //最后一个节点就是该路径的终点
+            this->allShortPath[node]=i; //以终点为索引
+        }
     }
 
     //Dijkstra记忆化
     int dijkstraV=-1;
-    vector<int> allShortPath;
+    vector< vector<int> > allShortPath;
 
 public:
     graph(int nodeNum) : nodeNum(nodeNum)
@@ -322,7 +331,7 @@ public:
         return result;
     }
 
-    int shortestPath(int v,int vi)
+    vector<int> shortestPath(int v,int vi)
     {
         if(v!=this->dijkstraV)
             this->Dijkstra(v);
