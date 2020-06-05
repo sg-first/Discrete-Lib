@@ -38,7 +38,7 @@ private:
         delete[] m;
     }
 
-    bool DFS(int i, vector<bool>& visited, int ii=-1) //是否能找到ii（找到返回true）。如果ii=-1永远返回false且输出遍历过程
+    bool DFS(int i, vector<bool>& visited, int ii=-1) const //是否能找到ii（找到返回true）。如果ii=-1永远返回false且输出遍历过程
     {
         if(ii==-1)
             printf("v%d->",i); //输出当前遍历过的结点
@@ -56,7 +56,7 @@ private:
         return false;
     }
 
-    bool BFS(int start, vector<bool>& visited, int ii=-1)
+    bool BFS(int start, vector<bool>& visited, int ii=-1) const
     {
         queue<int> q;
         int q_top;
@@ -101,7 +101,7 @@ private:
         return false;
     }
 
-    vector<bool> genVisited()
+    vector<bool> genVisited() const
     {
         vector<bool>visited;
         for(int i=0;i<this->nodeNum;i++)
@@ -240,6 +240,9 @@ public:
         return *this;
     }
 
+    int getNodeNum() const { return this->nodeNum; }
+    int getWeight(int i,int j) const { return this->m[i][j]; }
+
     void setEdge(int n1, int n2, int weight)
     {
         if(n1==n2)
@@ -249,7 +252,7 @@ public:
         this->m[n2][n1]=weight;
     }
 
-    bool zeroGraph()
+    bool zeroGraph() const
     {
         for (unsigned int i = 0; i < nodeNum; i++)
         {
@@ -262,7 +265,7 @@ public:
         return true;
     }
 
-    bool isCompletedGraph()
+    bool isCompletedGraph() const
     {
         for (unsigned int i = 0; i < nodeNum; i++)
         {
@@ -275,19 +278,19 @@ public:
         return true;
     }
 
-    void DFS(int i)
+    void DFS(int i) const
     {
         auto visited=this->genVisited();
         this->DFS(i,visited);
     }
 
-    void BFS(int i)
+    void BFS(int i) const
     {
         auto visited=this->genVisited();
         this->BFS(i,visited);
     }
 
-    bool isConnected()
+    bool isConnected() const
     {
         for(int v = 0;v<this->nodeNum-1;v++) // 从0开始搜索，如果能遍访所有顶点 则说明连通
         {
@@ -301,7 +304,7 @@ public:
         return true;
     }
 
-    int getDegree(int j)
+    int getDegree(int j) const
     {
         int result=0;
         for (int i = 0; i < this->nodeNum; i++ )
@@ -312,7 +315,7 @@ public:
         return result;
     }
 
-    graph minimumSpanningTree() //Prim算法最小生成树
+    graph minimumSpanningTree() const //Prim算法最小生成树
     {
         graph result(this->nodeNum);
         set<int> allNodeSet; //所有节点的集合
@@ -338,7 +341,17 @@ public:
         return this->allShortPath[vi];
     }
 
-    void output()
+    bool isIsolated(int v) const
+    {
+        for(int i=0;i<this->nodeNum;i++)
+        {
+            if(this->m[v][i]!=0)
+                return false;
+        }
+        return true;
+    }
+
+    void output() const
     {
         for (unsigned int i = 0; i < this->nodeNum; i++)
         {
@@ -349,4 +362,6 @@ public:
             printf("\n");
         }
     }
+
+    bool isPlanar();
 };
