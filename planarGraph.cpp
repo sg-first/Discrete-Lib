@@ -228,6 +228,7 @@ vector< graph* >* getComponents(const graph& g)
     delete []depth;
     delete []lowneighbour;
     delete []pointType;
+    delete []lowpoint;
     delete l;
     return components;
 }
