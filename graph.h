@@ -252,7 +252,7 @@ public:
         this->m[n2][n1]=weight;
     }
 
-    bool zeroGraph() const
+    bool isZero() const
     {
         for (unsigned int i = 0; i < nodeNum; i++)
         {
@@ -265,7 +265,7 @@ public:
         return true;
     }
 
-    bool isCompletedGraph() const
+    bool isCompleted() const
     {
         for (unsigned int i = 0; i < nodeNum; i++)
         {
@@ -327,16 +327,38 @@ public:
         while(nodeSet.size()!=allNodeSet.size())
         {
             set<int> diffSet=getSetDiff(allNodeSet,nodeSet); //计算量集合差集
-            //fix:从差集中找到另一点b使得点b到集合nodeSet中任意一点的权值最小，此时将b点也加入集合V
-            //fix:加入集合后还需对result图中的该节点setEdge，权值与this相同
+            //从差集中找到另一点b使得点b到集合nodeSet中任意一点的权值最小，
+            int minW=0;
+            int nodeSetI;
+            int diffSetJ;
+
+            for(int i : nodeSet)
+            {
+                for(int j : diffSet)
+                {
+                    if(this->m[i][j]!=0)
+                    {
+                        if(this->m[i][j]<minW || minW==0)
+                        {
+                            minW=this->m[i][j];
+                            nodeSetI=i;
+                            diffSetJ=j;
+                        }
+                    }
+                }
+            }
+            //将b点也加入集合nodeSet
+            nodeSet.insert(diffSetJ);
+            //将两点的连接加入result图
+            result.setEdge(nodeSetI,diffSetJ,minW);
         }
 
         return result;
     }
 
-    vector<int> shortestPath(int v,int vi)
+    vector<int> shortestPath(int v,int vi, bool isReset=false)
     {
-        if(v!=this->dijkstraV)
+        if(v!=this->dijkstraV || isReset)
             this->Dijkstra(v);
         return this->allShortPath[vi];
     }
@@ -350,6 +372,22 @@ public:
         }
         return true;
     }
+
+    int getEdgeNum() const
+    {
+        int num=0;
+        for ( int i = 0; i <= this->getNodeNum(); ++i )
+        {
+            for(int j=0;j<this->getNodeNum();j++)
+            {
+                if(this->getWeight(i,j)!=0)
+                    num++;
+            }
+        }
+        return num;
+    }
+
+    //graph toDual();
 
     void output() const
     {
