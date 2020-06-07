@@ -27,7 +27,7 @@ int *depth;
 bool *pointEmbed;
 bool **edgeEmbed;
 
-graph* createComponent(int pointCount, list< pair<int, int> >* l)
+graph* createComponent(unsigned int pointCount, list< pair<int, int> >* l)
 {
     graph *g=new graph(pointCount);
     pair<int, int> temp;
@@ -52,7 +52,7 @@ void DFSVisit(const graph &g, int u, list< pair<int, int> >* l, vector< graph* >
     int tempLowneighbour = MAXINT;
 
 
-    for (int ltra=0; ltra<g.getNodeNum(); ltra++)
+    for (unsigned int ltra=0; ltra<g.getNodeNum(); ltra++)
     {
         int v = g.getWeight(u,ltra);
         if (colour[v] == WHITE)
@@ -110,8 +110,8 @@ void DFSVisit(const graph &g, int u, list< pair<int, int> >* l, vector< graph* >
 
 circle* getOneCircle(const graph &g, int start)
 {
-    int pointCount = g.getNodeNum();//图的节点数
-    for (int i=0; i<pointCount; i++)
+    unsigned int pointCount = g.getNodeNum();//图的节点数
+    for (unsigned int i=0; i<pointCount; i++)
     {
         colour[i] = WHITE;
     }
@@ -128,9 +128,9 @@ circle* getOneCircle(const graph &g, int start)
     while (!q.empty())
     {
         u = q.front(); q.pop();
-        for (int tra=0; tra<g.getNodeNum(); tra++)
+        for (unsigned int tra=0; tra<g.getNodeNum(); tra++)
         {
-            v = g.getWeight(u,tra);//解引用操作
+            v = g.getWeight(u,tra);
             if (colour[v] == WHITE)
             {
                 q.push(v);
@@ -171,20 +171,17 @@ buildTheCircle:
 //在深度优先树回溯找割点的过程中就可以将biconnected component找出来
 vector< graph* >* getComponents(const graph& g)
 {
+    //一些遍历用的变量
+    int *lowneighbour=new int[g.getNodeNum()];
+    int *pointType=new int[g.getNodeNum()];
+    int *lowpoint=new int[g.getNodeNum()];
+
     int i;
     vector< graph* >* components = new vector< graph* >;
     list<int>::iterator it;
     list<int>::iterator ie;
     list< pair<int, int> >* l = new list< pair<int, int> >;
-    int pointCount = g.getNodeNum();
-
-    //为遍历设置的数组
-    colour=new int[g.getNodeNum()];
-    parent=new int[g.getNodeNum()];
-    depth=new int[g.getNodeNum()];
-    int *lowneighbour=new int[g.getNodeNum()];
-    int *pointType=new int[g.getNodeNum()];
-    int *lowpoint=new int[g.getNodeNum()];
+    unsigned int pointCount = g.getNodeNum();
 
     for (i=0; i<pointCount; i++)
     {
@@ -205,7 +202,7 @@ vector< graph* >* getComponents(const graph& g)
             DFSVisit(g, i, l, components, visitTime, lowneighbour, pointType, lowpoint);
 
             childCount = 0;			//对于根结点, 如果它有两个以上的儿子, 则该结点是割点
-            for (int it=0; it<g.getNodeNum(); it++)
+            for (unsigned int it=0; it<g.getNodeNum(); it++)
             {
                 int node=g.getWeight(i,it);
                 if (parent[node] == i)
@@ -223,9 +220,7 @@ vector< graph* >* getComponents(const graph& g)
             }
         }
     }
-    delete []colour;
-    delete []parent;
-    delete []depth;
+
     delete []lowneighbour;
     delete []pointType;
     delete []lowpoint;
@@ -250,10 +245,10 @@ vector< face* >* getFacesFromOneCircle(circle*& c)
     return faces;
 }
 
-fragment* createFragment(int pointCount)
+fragment* createFragment(unsigned int pointCount)
 {
     fragment* g = new fragment;
-    for (int i=0; i<pointCount; i++) {
+    for (unsigned int i=0; i<pointCount; i++) {
         g->push_back(new list<int>);
     }
     return g;
@@ -261,10 +256,10 @@ fragment* createFragment(int pointCount)
 
 vector< fragment* >* getFragments(const graph &g)
 {
-    int pointCount = g.getNodeNum();
+    unsigned int pointCount = g.getNodeNum();
     int *pointKind=new int[g.getNodeNum()];
 
-    for (int i=0; i<pointCount; i++)
+    for (unsigned int i=0; i<pointCount; i++)
     {
         colour[i] = WHITE;
         if (pointEmbed[i] || g.isIsolated(i))
@@ -284,7 +279,7 @@ vector< fragment* >* getFragments(const graph &g)
     list<int>::iterator lend;
     //广度优先遍历找fragment,
     //将fragment分成两类: 1包含末嵌入到平面的结点的, 2不包含...的
-    for (int i=0; i<pointCount; i++)
+    for (unsigned int i=0; i<pointCount; i++)
     {
         if (colour[i] == WHITE)
         {		//fragment有可能不只一个
@@ -299,7 +294,7 @@ vector< fragment* >* getFragments(const graph &g)
                 while (!q.empty())
                 {
                     int u = q.front(); q.pop();
-                    for (int ltra=0; ltra<g.getNodeNum(); ltra++)
+                    for (unsigned int ltra=0; ltra<g.getNodeNum(); ltra++)
                     {
                         int v = g.getWeight(u,ltra);
                         if (colour[v] == WHITE)
@@ -337,10 +332,10 @@ vector< fragment* >* getFragments(const graph &g)
             //这些fragment只有一条边, edgeEmbed[]是用来提供已经嵌入平面的边的信息的
             else if (pointKind[i] == EMBEDED)
             {
-                for (int ltra=0; ltra<g.getNodeNum(); ltra++)
+                for (unsigned int ltra=0; ltra<g.getNodeNum(); ltra++)
                 {
                     int v=g.getWeight(i,ltra);
-                    assert(i != v);
+                    //assert(i != v); //fix:
                     if (pointKind[v] == EMBEDED && !edgeEmbed[i][v])
                     {
                         fragment *f = createFragment(pointCount);
@@ -361,11 +356,11 @@ vector< fragment* >* getFragments(const graph &g)
 }
 
 //标记已经嵌入到平面的边
-void markEmbedEdge(const circle *c, int pointCount)
+void markEmbedEdge(const circle *c, unsigned int pointCount)
 {
-    for (int i=0; i<pointCount; i++)
+    for (unsigned int i=0; i<pointCount; i++)
     {
-        for (int j=0; j<pointCount; j++)
+        for (unsigned int j=0; j<pointCount; j++)
         {
             edgeEmbed[i][j] = false;
         }
@@ -386,7 +381,7 @@ void markEmbedEdge(const circle *c, int pointCount)
 //fragment与已经嵌入平面的子图的公共点就是contact point
 bool* findContactPoint(const fragment *f)
 {
-    int pointCount = f->size();
+    unsigned int pointCount = f->size();
     bool *contactPoint = new bool[pointCount];
     memset(contactPoint, false, sizeof(bool) * pointCount);
     for(int i=0; i < pointCount; i++)
@@ -400,7 +395,7 @@ bool* findContactPoint(const fragment *f)
 }
 
 //找一个face所包含的所有点
-bool *findFacePoint(const face *fa, int pointCount)
+bool *findFacePoint(const face *fa, unsigned int pointCount)
 {
     bool *facePoint = new bool[pointCount];
     memset(facePoint, false, pointCount * sizeof(bool));
@@ -417,11 +412,11 @@ bool *findFacePoint(const face *fa, int pointCount)
 
 bool isAdmissible(const fragment *fr, const face *fa)
 {
-    int pointCount = fr->size();
+    unsigned int pointCount = fr->size();
     bool *contactPoint = findContactPoint(fr);
     bool *facePoint = findFacePoint(fa, pointCount);
     bool admissible = true;
-    for (int i=0; i<pointCount; i++)
+    for (unsigned int i=0; i<pointCount; i++)
     {
         //face只有包含fragment的所有contact point, 它才是admissible face
         if (contactPoint[i] && !facePoint[i])
@@ -484,9 +479,12 @@ bool getAdmissibleFace(const vector< fragment* > *fragments, const vector< face*
 }
 
 //标记已经嵌入到平面的点
-void markEmbedPoint(const circle *c, int pointCount)
+void markEmbedPoint(const circle *c, unsigned int pointCount)
 {
-    memset(pointEmbed, false, sizeof(bool)*pointCount);
+    pointEmbed=new bool[pointCount];
+    for(unsigned int i=0;i<pointCount;i++)
+        pointEmbed[i]=false;
+
     circle::const_iterator ctra = c->begin();
     circle::const_iterator cend = c->end();
     for (; ctra != cend; ctra++)
@@ -496,6 +494,8 @@ void markEmbedPoint(const circle *c, int pointCount)
             pointEmbed[*ctra] = true;
         }
     }
+
+    delete []pointEmbed;
 }
 
 //广度优先遍历, 从一个contact point出发找到另一个contact point即可建立一条alpha path
@@ -515,7 +515,7 @@ path* getAlphaPath(fragment *f)
     }
     assert(ftra != fend);
 
-    int pointCount = f->size();
+    unsigned int pointCount = f->size();
     memset(colour, WHITE, pointCount * sizeof(int));
     queue<int> q;
     q.push(start);
@@ -654,9 +654,9 @@ bool testPlanarityOfBiconnectedGraph(const graph &g)
     for(int i=0;i<g.getNodeNum();i++)
         edgeEmbed[i]=new bool[g.getNodeNum()];
 
-    int start = 0;
-    int pointCount = g.getNodeNum();
-    for (int i=0; i<pointCount; i++)
+    unsigned int start = 0;
+    unsigned int pointCount = g.getNodeNum();
+    for (unsigned int i=0; i<pointCount; i++)
     {
         if (!g.isIsolated(i))
         {
@@ -754,11 +754,11 @@ bool testPlanarityOfBiconnectedGraph(const graph &g)
 //getComponents()产生的某个component如果只有两条边, 那么这个component是一个bridge
 bool isBridge(const graph &g, pair<int, int>& bridge)
 {
-    int pointCount = g.getNodeNum();
+    unsigned int pointCount = g.getNodeNum();
     int count = 0;
     int point[2];
 
-    for (int i=0; i<pointCount; i++)
+    for (unsigned int i=0; i<pointCount; i++)
     {
         if (!g.isIsolated(i))
         {
@@ -773,13 +773,19 @@ bool isBridge(const graph &g, pair<int, int>& bridge)
 
 bool graph::isPlanar()
 {
+    unsigned int n=this->getNodeNum();
+    //初始化全局变量
+    colour=new int[n];
+    parent=new int[n];
+    depth=new int[n];
+
     vector< graph* >* components;
     graph *component;
     //将图分为若干个biconnected graph, 一个图是平面图当且仅当它的每个component都是平面图
     components = getComponents(*this);
     int componentCount = components->size();
     bool isPlane = true;
-    for (int i=0; i<componentCount; i++)
+    for (unsigned int i=0; i<componentCount; i++)
     {
         component = components->at(i);
         pair<int, int> bridge;
@@ -789,7 +795,7 @@ bool graph::isPlanar()
             isPlane = testPlanarityOfBiconnectedGraph(*component);
             if (!isPlane)
             {
-                return false;
+                return true;
             }
         }
     }
@@ -802,5 +808,8 @@ bool graph::isPlanar()
     };
 
     destroyGraphs(components);
-    return true;
+    delete []colour;
+    delete []parent;
+    delete []depth;
+    return false;
 }

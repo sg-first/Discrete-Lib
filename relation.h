@@ -42,7 +42,7 @@ public:
             {
                 if (a == j.first)
                 {
-                    result.addPair(b, j.second); //result¿ªÊ¼ºÍthisÒ»Ñù£¬ËùÒÔÇ°Ãæ¶¼ÓÃthis£¬ÕâÀïĞŞ¸Ä¾ÍÓÃresult
+                    result.addPair(b, j.second); //resultå¼€å§‹å’Œthisä¸€æ ·ï¼Œæ‰€ä»¥å‰é¢éƒ½ç”¨thisï¼Œè¿™é‡Œä¿®æ”¹å°±ç”¨result
                 }
             }
         }
@@ -51,8 +51,7 @@ public:
 
     bool isReflexivive()
     {
-        cout << "×Ô·´£º";
-        //fix:×Ô·´Ö»ÊÇÒªÇóÃ¿¸öÔªËØa¶¼ÓĞ<a,a>£¬²»ÅÅ³âÓĞ<a,b>£¬Ö»ÒªÓĞ<b,b>¾ÍĞĞ
+        //fix:è‡ªååªæ˜¯è¦æ±‚æ¯ä¸ªå…ƒç´ aéƒ½æœ‰<a,a>ï¼Œä¸æ’æ–¥æœ‰<a,b>ï¼Œåªè¦æœ‰<b,b>å°±è¡Œ
         for (auto i : this->allPair)
         {
             if (i.second == i.first)
@@ -63,21 +62,19 @@ public:
             {
                 for (auto r : this->allPair)
                 {
-                    if (i.first == r.first == r.second)//²âÊÔÍâÑ­»·µÄµÚÒ»¸öÊı
+                    if (i.first == r.first && i.first == r.second && r.first==r.second)//æµ‹è¯•å¤–å¾ªç¯çš„ç¬¬ä¸€ä¸ªæ•°
                         break;
                     else
                     {
-                        cout << "no";
                         return false;
                     }
                 }
                 for (auto s : this->allPair)
                 {
-                    if (i.second == s.first == s.second)//²âÊÔÄÚÑ­»·µÄµÚ¶ş¸öÊı
+                    if (i.second == s.first && i.second == s.second && s.first==s.second)//æµ‹è¯•å†…å¾ªç¯çš„ç¬¬äºŒä¸ªæ•°
                         break;
                     else
                     {
-                        cout << "no";
                         return false;
                     }
                 }
@@ -89,8 +86,7 @@ public:
 
     bool isIrreflexive()
     {
-        //fix:Í¬ÉÏ
-        cout << "·´×Ô·´£º";
+        //fix:åŒä¸Š
         for (auto i : this->allPair)
         {
             if (i.second == i.first)
@@ -101,9 +97,8 @@ public:
             {
                 for (auto r : this->allPair)
                 {
-                    if (i.first == r.first == r.second)//²âÊÔÍâÑ­»·µÄµÚÒ»¸öÊı
+                    if (i.first == r.first == r.second)//æµ‹è¯•å¤–å¾ªç¯çš„ç¬¬ä¸€ä¸ªæ•°
                     {
-                        cout << "no";
                         return false;
                     }
                     else
@@ -112,9 +107,8 @@ public:
                 }
                 for (auto s : this->allPair)
                 {
-                    if (i.second == s.first == s.second)//²âÊÔÄÚÑ­»·µÄµÚ¶ş¸öÊı
+                    if (i.second == s.first == s.second)//æµ‹è¯•å†…å¾ªç¯çš„ç¬¬äºŒä¸ªæ•°
                     {
-                        cout << "no";
                         return false;
                     }
                     else
@@ -127,34 +121,30 @@ public:
 
     bool isSymmetry()
     {
-        cout << "¶Ô³Æ:";
         for (auto s : this->allPair)
         {
             bool flag = false;
             for (auto i : this->allPair)
             {
                 if (i.first == s.second && i.second == s.first)
-                    flag = true; //ÕÒµ½Ò»¸ö¶Ô³ÆµÄ¾ÍÊÇ¶Ô³Æ
+                    flag = true; //æ‰¾åˆ°ä¸€ä¸ªå¯¹ç§°çš„å°±æ˜¯å¯¹ç§°
             }
             if (flag == false)
             {
-                cout << "NO";
                 return false;
             }
         }
         return true;
     }
 
-    bool isAntisymmetry()//·´¶Ô³Æ
+    bool isAntisymmetry()//åå¯¹ç§°
     {
-        cout << "·´¶Ô³Æ£º";
         for (auto s : this->allPair)
         {
             for (auto i : this->allPair)
             {
                 if (i.first == s.second && i.second == s.first)
                 {
-                    cout << "NO";
                     return false;
                 }
             }
@@ -162,26 +152,24 @@ public:
         return true;
     }
 
-    bool isTransitivity()//´«µİ
+    bool isTransitivity()//ä¼ é€’
     {
-        cout << "´«µİ£º";
         for (auto f : this->allPair)
         {
             //<x,y>
             bool  ss = true;
             for (auto i : this->allPair)
             {
-                if (i.first == f.second)//Ñ°ÕÒ<y,z>
+                if (i.first == f.second)//å¯»æ‰¾<y,z>
                 {
                     for (auto s : this->allPair)
                     {
-                        if (s.first == f.first && s.second == i.second)//ÕÒµ½<x,z>
+                        if (s.first == f.first && s.second == i.second)//æ‰¾åˆ°<x,z>
                         {
-                            ss = false;//false±íÊ¾Îª´«µİ¹ØÏµ£»
+                            ss = false;//falseè¡¨ç¤ºä¸ºä¼ é€’å…³ç³»ï¼›
                         }
                         if (ss == true)
                         {
-                            cout << "NO";
                             return true;
                         }
                     }
@@ -191,7 +179,8 @@ public:
         }
         return false;
     }
-    relation TransitiveClosure()//´«µİ±Õ°ü
+
+    relation TransitiveClosure()//ä¼ é€’é—­åŒ…
     {
         relation result(*this);
         for (auto i : this->allPair)
@@ -204,7 +193,7 @@ public:
         return result;
     }
 
-    relation reflexiveClosure()//×Ô·´±Õ°ü
+    relation reflexiveClosure()//è‡ªåé—­åŒ…
     {
         relation result(*this);
         for (auto i : this->allPair)
@@ -215,7 +204,7 @@ public:
         return result;
     }
 
-    relation symmetricClosure()//¶Ô³Æ±Õ°ü
+    relation symmetricClosure()//å¯¹ç§°é—­åŒ…
     {
         relation result(*this);
         for (auto i : this->allPair)
