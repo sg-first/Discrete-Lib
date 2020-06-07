@@ -42,7 +42,7 @@ public:
             {
                 if (a == j.first)
                 {
-                    result.addPair(b, j.second); //resultå¼€å§‹å’Œthisä¸€æ ·ï¼Œæ‰€ä»¥å‰é¢éƒ½ç”¨thisï¼Œè¿™é‡Œä¿®æ”¹å°±ç”¨result
+                    result.addPair(b, j.second); //result¿ªÊ¼ºÍthisÒ»Ñù£¬ËùÒÔÇ°Ãæ¶¼ÓÃthis£¬ÕâÀïĞŞ¸Ä¾ÍÓÃresult
                 }
             }
         }
@@ -51,105 +51,175 @@ public:
 
     bool isReflexivive()
     {
-        //fix:è‡ªååªæ˜¯è¦æ±‚æ¯ä¸ªå…ƒç´ aéƒ½æœ‰<a,a>ï¼Œä¸æ’æ–¥æœ‰<a,b>ï¼Œåªè¦æœ‰<b,b>å°±è¡Œ
+        cout << "×Ô·´£º";
+        //fix:×Ô·´Ö»ÊÇÒªÇóÃ¿¸öÔªËØa¶¼ÓĞ<a,a>£¬²»ÅÅ³âÓĞ<a,b>£¬Ö»ÒªÓĞ<b,b>¾ÍĞĞ
         for (auto i : this->allPair)
         {
-            if (i.first != i.second)
-                return false;
+            if (i.second == i.first)
+            {
+                break;
+            }
+            else
+            {
+                for (auto r : this->allPair)
+                {
+                    if (i.first == r.first == r.second)//²âÊÔÍâÑ­»·µÄµÚÒ»¸öÊı
+                        break;
+                    else
+                    {
+                        cout << "no";
+                        return false;
+                    }
+                }
+                for (auto s : this->allPair)
+                {
+                    if (i.second == s.first == s.second)//²âÊÔÄÚÑ­»·µÄµÚ¶ş¸öÊı
+                        break;
+                    else
+                    {
+                        cout << "no";
+                        return false;
+                    }
+                }
+            }
         }
         return true;
     }
 
+
     bool isIrreflexive()
     {
-        //fix:åŒä¸Š
+        //fix:Í¬ÉÏ
+        cout << "·´×Ô·´£º";
         for (auto i : this->allPair)
         {
-            if (i.first == i.second)
+            if (i.second == i.first)
+            {
                 return false;
+            }
+            else
+            {
+                for (auto r : this->allPair)
+                {
+                    if (i.first == r.first == r.second)//²âÊÔÍâÑ­»·µÄµÚÒ»¸öÊı
+                    {
+                        cout << "no";
+                        return false;
+                    }
+                    else
+                        break;
+
+                }
+                for (auto s : this->allPair)
+                {
+                    if (i.second == s.first == s.second)//²âÊÔÄÚÑ­»·µÄµÚ¶ş¸öÊı
+                    {
+                        cout << "no";
+                        return false;
+                    }
+                    else
+                        break;
+                }
+            }
         }
         return true;
     }
 
     bool isSymmetry()
     {
-        for (auto i : this->allPair)
+        cout << "¶Ô³Æ:";
+        for (auto s : this->allPair)
         {
-            int a, b;
-            a = i.first;
-            b = i.second;
-            bool flag=false;
+            bool flag = false;
             for (auto i : this->allPair)
             {
-                if (i.first == b && i.second == a)
-                    flag=true; //æ‰¾åˆ°ä¸€ä¸ªå¯¹ç§°çš„å°±æ˜¯å¯¹ç§°
+                if (i.first == s.second && i.second == s.first)
+                    flag = true; //ÕÒµ½Ò»¸ö¶Ô³ÆµÄ¾ÍÊÇ¶Ô³Æ
             }
-            if(flag==false)
+            if (flag == false)
+            {
+                cout << "NO";
                 return false;
-        }
-        return true;
-    }
-
-    bool isAntisymmetry()
-    {
-        for (auto i : this->allPair)
-        {
-            int a, b;
-            a = i.first;
-            b = i.second;
-            for (auto i : this->allPair)
-            {
-                if (i.first == b && i.second == a)
-                    return false;
             }
         }
         return true;
     }
 
-    bool isTransitivity()
+    bool isAntisymmetry()//·´¶Ô³Æ
     {
-        bool ss = false; //fix:æ°¸è¿œè¿”å›false
-        for (auto i : this->allPair)
+        cout << "·´¶Ô³Æ£º";
+        for (auto s : this->allPair)
         {
-            int a, b;
-            a = i.first;
-            b = i.second;
+            for (auto i : this->allPair)
+            {
+                if (i.first == s.second && i.second == s.first)
+                {
+                    cout << "NO";
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    bool isTransitivity()//´«µİ
+    {
+        cout << "´«µİ£º";
+        for (auto f : this->allPair)
+        {
+            //<x,y>
             bool  ss = true;
             for (auto i : this->allPair)
             {
-                if (i.first == b)//å¯»æ‰¾<x,y><y,z>
+                if (i.first == f.second)//Ñ°ÕÒ<y,z>
                 {
-                    int c = i.second;
-                    for (auto i : this->allPair)
+                    for (auto s : this->allPair)
                     {
-                        if (i.first == a && i.second == c)//æ‰¾åˆ°<x,z>
+                        if (s.first == f.first && s.second == i.second)//ÕÒµ½<x,z>
                         {
-                            ss = false;//falseè¡¨ç¤ºä¸ºä¼ é€’å…³ç³»ï¼›
-                        }            
+                            ss = false;//false±íÊ¾Îª´«µİ¹ØÏµ£»
+                        }
+                        if (ss == true)
+                        {
+                            cout << "NO";
+                            return true;
+                        }
                     }
                 }
-                
+
             }
         }
-        return ss;
+        return false;
     }
-
-    relation reflexiveClosure()
+    relation TransitiveClosure()//´«µİ±Õ°ü
     {
         relation result(*this);
         for (auto i : this->allPair)
         {
-            result.addPair(i.first,i.first);
-            result.addPair(i.second,i.second);
+            for (auto s : this->allPair)
+            {
+                result.addPair(i.first, i.second);
+            }
         }
         return result;
     }
 
-    relation symmetricClosure()
+    relation reflexiveClosure()//×Ô·´±Õ°ü
     {
         relation result(*this);
         for (auto i : this->allPair)
-            result.addPair(i.second,i.first);
+        {
+            result.addPair(i.first, i.first);
+            result.addPair(i.second, i.second);
+        }
+        return result;
+    }
+
+    relation symmetricClosure()//¶Ô³Æ±Õ°ü
+    {
+        relation result(*this);
+        for (auto i : this->allPair)
+            result.addPair(i.second, i.first);
         return result;
     }
 };
