@@ -198,7 +198,7 @@ public:
         {
             for (auto s : this->allPair)
             {
-                result.addPair(i.first, i.second);
+                result.addPair(i.first, s.second);
             }
         }
         return result;
