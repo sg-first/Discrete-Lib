@@ -114,7 +114,7 @@ public:
             bool  ss = false;
             for (auto i : this->allPair)
             {
-                if (i.first == f.second)//寻找<y,z>
+                if (i!=f && i.first == f.second)//寻找<y,z>
                 {
                     if(!isExist(f.first,i.second))
                         return false;
@@ -131,7 +131,8 @@ public:
         {
             for (auto s : this->allPair)
             {
-                result.addPair(i.first, s.second);
+                if(i!=s)
+                    result.addPair(i.first, s.second);
             }
         }
         return result;
