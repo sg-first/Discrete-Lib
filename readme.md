@@ -1,4 +1,10 @@
-﻿#include <iostream>
+Discrete Lib
+=============
+test
+----------
+* code:
+``` cpp
+#include <iostream>
 #include "relation.h"
 #include "graph.h"
 using namespace std;
@@ -53,3 +59,67 @@ int main()
     auto C=A.composite(B);
     C.output();
 }
+```
+
+* result:
+```
+0 2 1 0 0 0
+2 0 3 4 0 0
+1 3 0 4 1 0
+0 4 4 0 5 0
+0 0 1 5 0 1
+0 0 0 0 1 0
+connection:1
+complete:0
+zero:0
+3 degree3
+mini tree:
+0 2 1 0 0 0
+2 0 0 4 0 0
+1 0 0 0 1 0
+0 4 0 0 0 0
+0 0 1 0 0 1
+0 0 0 0 1 0
+0 5 path:3
+planar:1
+Reflexivive:0
+Irreflexive:0
+Symmetry:1
+Antisymmetry:0
+Transitivity:0
+TransitiveClosure:
+1,1
+1,2
+1,3
+2,1
+2,2
+2,3
+3,1
+3,2
+3,3
+reflexiveClosure:
+1,1
+1,2
+2,1
+2,2
+2,3
+3,2
+3,3
+symmetricClosure:
+1,1
+1,2
+2,1
+2,2
+2,3
+3,2
+composite
+1,1
+1,2
+1,5
+2,1
+2,2
+2,3
+2,5
+3,2
+3,5
+```

@@ -51,50 +51,23 @@ public:
 
     bool isReflexivive()
     {
-        //fix:自反只是要求每个元素a都有<a,a>，不排斥有<a,b>，只要有<b,b>就行
-        for (auto i : this->allPair)
+        auto haveReflexivive=[this](int i)
         {
-            bool flag=false;
-            if (i.second == i.first)
+            for(auto j : this->allPair)
             {
-                break;
+                if(j.first==i && j.second==i)
+                    return true;
             }
-            else
+            return false;
+        };
+        for(auto j : this->allPair)
+        {
+            if(j.first != j.second)
             {
-                for (auto r : this->allPair)
-                {
-                    if (i.first == r.first && i.first == r.second && r.first == r.second)//测试外循环的第一个数
-                    {
-                        flag = true;
-                        break;
-                    }
-                    else 
-                    {
-                        flag = false;
-                    }
-                    
-                }
-                if(flag==false)
-                {
-                        return false;
-                }
-                for (auto s : this->allPair)
-                {
-                    if (i.second == s.first && i.second == s.second && s.first == s.second)//测试内循环的第二个数
-                    {
-                        flag = true;
-                        break;
-                    }
-                    else
-                    {
-                        flag = false;
-                    }
-                    
-                }
-                if (flag == false)
-                    {
-                        return false;
-                    }
+                if(haveReflexivive(j.first))
+                    return false;
+                if(haveReflexivive(j.second))
+                    return false;
             }
         }
         return true;
