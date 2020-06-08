@@ -72,7 +72,7 @@ int main()
 connection:1
 complete:0
 zero:0
-3 degree3
+3 degree:3
 mini tree:
 0 2 1 0 0 0
 2 0 0 4 0 0

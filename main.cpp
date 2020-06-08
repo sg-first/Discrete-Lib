@@ -19,7 +19,7 @@ int main()
     cout<<"connection:"<<g.isConnected()<<endl;
     cout<<"complete:"<<g.isCompleted()<<endl;
     cout<<"zero:"<<g.isZero()<<endl;
-    cout<<"3 degree"<<g.getDegree(3)<<endl;
+    cout<<"3 degree:"<<g.getDegree(3)<<endl;
     cout<<"mini tree:"<<endl;
     auto miniTree=g.minimumSpanningTree();
     miniTree.output();
