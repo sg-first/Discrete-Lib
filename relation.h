@@ -6,9 +6,20 @@ using namespace std;
 
 class relation
 {
-public:
+private:
     set< pair<int, int> > allPair;
 
+    bool isExist(int i,int j)
+    {
+        for(auto k : this->allPair)
+        {
+            if(k.first==i && k.second==j)
+                return true;
+        }
+        return false;
+    }
+
+public:
     relation() {}
     relation(const relation& r)
     {
@@ -51,22 +62,13 @@ public:
 
     bool isReflexivive()
     {
-        auto haveReflexivive=[this](int i)
-        {
-            for(auto j : this->allPair)
-            {
-                if(j.first==i && j.second==i)
-                    return true;
-            }
-            return false;
-        };
         for(auto j : this->allPair)
         {
             if(j.first != j.second)
             {
-                if(haveReflexivive(j.first))
+                if(!isExist(j.first,j.first))
                     return false;
-                if(haveReflexivive(j.second))
+                if(!isExist(j.second,j.second))
                     return false;
             }
         }
@@ -76,30 +78,10 @@ public:
 
     bool isIrreflexive()
     {
-        //fix:同上
         for (auto i : this->allPair)
         {
             if (i.second == i.first)
-            {
                 return false;
-            }
-            else
-            {
-                for (auto r : this->allPair)
-                {
-                    if (i.first == r.first && r.first == r.second && i.first == r.second)//测试外循环的第一个数
-                    {
-                        return false; 
-                    }
-                }
-                for (auto s : this->allPair)
-                {
-                    if (i.second == s.first && s.first == s.second && i.second == s.second)//测试内循环的第二个数
-                    {
-                        return false;
-                    }
-                }
-            }
         }
         return true;
     }
@@ -108,16 +90,8 @@ public:
     {
         for (auto s : this->allPair)
         {
-            bool flag = false;
-            for (auto i : this->allPair)
-            {
-                if (i.first == s.second && i.second == s.first)
-                    flag = true; //找到一个对称的就是对称
-            }
-            if (flag == false)
-            {
+            if(!isExist(s.second,s.first))
                 return false;
-            }
         }
         return true;
     }
@@ -126,13 +100,8 @@ public:
     {
         for (auto s : this->allPair)
         {
-            for (auto i : this->allPair)
-            {
-                if (i.first == s.second && i.second == s.first)
-                {
-                    return false;
-                }
-            }
+            if(isExist(s.second,s.first))
+                return false;
         }
         return true;
     }
@@ -147,19 +116,9 @@ public:
             {
                 if (i.first == f.second)//寻找<y,z>
                 {
-                    for (auto s : this->allPair)
-                    {
-                        if (s.first == f.first && s.second == i.second)//找到<x,z>
-                        {
-                            ss = true;
-                        }
-                        if (ss == false)
-                        {
-                            return false;
-                        }
-                    }
+                    if(!isExist(f.first,i.second))
+                        return false;
                 }
-
             }
         }
         return true;
