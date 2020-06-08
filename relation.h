@@ -54,6 +54,7 @@ public:
         //fix:自反只是要求每个元素a都有<a,a>，不排斥有<a,b>，只要有<b,b>就行
         for (auto i : this->allPair)
         {
+            bool flag=false;
             if (i.second == i.first)
             {
                 break;
@@ -62,22 +63,38 @@ public:
             {
                 for (auto r : this->allPair)
                 {
-                    if (i.first == r.first && i.first == r.second && r.first==r.second)//测试外循环的第一个数
-                        break;
-                    else
+                    if (i.first == r.first && i.first == r.second && r.first == r.second)//测试外循环的第一个数
                     {
-                        return false;
+                        flag = true;
+                        break;
                     }
+                    else 
+                    {
+                        flag = false;
+                    }
+                    
+                }
+                if(flag==false)
+                {
+                        return false;
                 }
                 for (auto s : this->allPair)
                 {
-                    if (i.second == s.first && i.second == s.second && s.first==s.second)//测试内循环的第二个数
+                    if (i.second == s.first && i.second == s.second && s.first == s.second)//测试内循环的第二个数
+                    {
+                        flag = true;
                         break;
+                    }
                     else
+                    {
+                        flag = false;
+                    }
+                    
+                }
+                if (flag == false)
                     {
                         return false;
                     }
-                }
             }
         }
         return true;
@@ -97,22 +114,17 @@ public:
             {
                 for (auto r : this->allPair)
                 {
-                    if (i.first == r.first == r.second)//测试外循环的第一个数
+                    if (i.first == r.first && r.first == r.second && i.first == r.second)//测试外循环的第一个数
                     {
-                        return false;
+                        return false; 
                     }
-                    else
-                        break;
-
                 }
                 for (auto s : this->allPair)
                 {
-                    if (i.second == s.first == s.second)//测试内循环的第二个数
+                    if (i.second == s.first && s.first == s.second && i.second == s.second)//测试内循环的第二个数
                     {
                         return false;
                     }
-                    else
-                        break;
                 }
             }
         }
@@ -157,7 +169,7 @@ public:
         for (auto f : this->allPair)
         {
             //<x,y>
-            bool  ss = true;
+            bool  ss = false;
             for (auto i : this->allPair)
             {
                 if (i.first == f.second)//寻找<y,z>
@@ -166,18 +178,18 @@ public:
                     {
                         if (s.first == f.first && s.second == i.second)//找到<x,z>
                         {
-                            ss = false;//false表示为传递关系；
+                            ss = true;
                         }
-                        if (ss == true)
+                        if (ss == false)
                         {
-                            return true;
+                            return false;
                         }
                     }
                 }
 
             }
         }
-        return false;
+        return true;
     }
 
     relation TransitiveClosure()//传递闭包

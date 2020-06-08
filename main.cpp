@@ -39,6 +39,15 @@ int main()
     cout<<"Symmetry:"<<A.isSymmetry()<<endl;
     cout<<"Antisymmetry:"<<A.isAntisymmetry()<<endl;
     cout<<"Transitivity:"<<A.isTransitivity()<<endl;
+    cout << "传递闭包：" << endl;
+    auto L= A.TransitiveClosure();
+    L.output();
+    cout << "自反闭包：" << endl;
+    auto F=A.reflexiveClosure();
+    F.output();
+    cout << "对称闭包：" << endl;
+    auto D= A.symmetricClosure();
+    D.output();
     B.addPair(2, 5);
     cout << "composite" << endl;
     auto C=A.composite(B);
