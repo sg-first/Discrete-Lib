@@ -5,6 +5,7 @@ relation
 ### void addPair(int a, int b)
 * 向关系添加一个二元组
 * `a`:二元组的第一个元素 `b`:二元组的第二个元组
+* 返回值：无
 
 graph
 --------
