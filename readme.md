@@ -7,55 +7,56 @@ relation
 * `a`:二元组的第一个元素 `b`:二元组的第二个元组
 * 返回值：无
 
-void output()
+### void output()
 
  - 输出二元组
  - 返回值：无
 
-relation composite(const relation& r)
+### relation composite(const relation& r)
 
  - 关系的复合
  - `r`：一个新关系
  - 返回值：两个关系复合后的新关系
 
-bool isReflexivive()
+### bool isReflexivive()
 
  - 判断关系是否自反
  - 返回值：该关系是否为自反
 
-bool isIrreflexive()
+### bool isIrreflexive()
  - 判断关系是否为反自反
  - 返回值：该关系是否为反自反
  
-  bool isSymmetry()
+ ### bool isSymmetry()
   
  - 判断关系是否为对称
  - 返回值：该关系是否为对称
  
- bool isAntisymmetry()
+### bool isAntisymmetry()
  
  - 判断该关系是否为反对称
  - 返回值：该关系是否为反对称
  
-  bool isTransitivity()
+ ### bool isTransitivity()
   
  - 判断该关系是否为传递
  - 返回值：该关系是否为传递
  
- relation TransitiveClosure()
+### relation TransitiveClosure()
  
  - 添加二元组，形成关系的传递闭包
  - 返回值：具有传递闭包的新关系
  
- relation reflexiveClosure()
+### relation reflexiveClosure()
  
  - 添加二元组，形成关系的自反闭包
  - 返回值：具有传递闭包的新关系
  
- relation symmetricClosure()
+### relation symmetricClosure()
  
  - 添加二元组，形成关系的对称闭包
  - 返回值：具有对称闭包的新关系
+
 graph
 --------
 
