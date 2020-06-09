@@ -7,11 +7,6 @@ relation
 * `a`:二元组的第一个元素 `b`:二元组的第二个元组
 * 返回值：无
 
-### void output()
-
- - 输出二元组
- - 返回值：无
-
 ### relation composite(const relation& r)
 
  - 关系的复合
@@ -59,6 +54,64 @@ relation
 
 graph
 --------
+### int getWeight(unsigned int i,unsigned int j) const
+ - 获取某条边的权重
+ - `i`:该边出发节点 `j`:该边到达节点
+ - 返回值：该边权重
+
+### void setEdge(unsigned int n1, unsigned int n2, int weight=1)
+ - 设置某条边的权重
+ - `n1`:该边出发节点 `n1`:该边到达节点 `weight`:设置的权重
+ - 返回值：无
+
+### unsigned int getNodeNum() const
+ - 获得该图的节点数量
+ - 返回值：该图的节点数量
+
+### bool isCompleted() const
+ - 判断该图是否是完全图
+ - 返回值：该图是否是完全图
+
+### void DFS(unsigned int i) const
+ - 对该图进行深度优先遍历
+ - `i`:起始节点
+ - 返回值：无
+
+### void BFS(unsigned int i) const
+ - 对该图进行广度优先遍历
+ - `i`:起始节点
+ - 返回值：无
+
+### bool isConnected() const
+ - 判断该图是否联通
+ - 返回值：该图是否联通
+
+### int getDegree(int j) const
+ - 获取一个节点的度
+ - `i`:要获取的节点
+ - 返回值：该节点的度
+
+### graph minimumSpanningTree() const
+ - 计算该图的最小生成树
+ - 返回值：该图的最小生成树
+
+### int shortestPath(unsigned int v,unsigned int vi, bool isReset=false)
+ - 计算两个节点间最短路径长度
+ - `v`:起始节点 `vi`:到达节点 `isReset`:是否重新计算（计算一个节点`v`的最短路径后会将其到其它所有节点的最短路径缓存，下次再查询`v`到某点的最短路径时直接使用。这个参数指示是否抛弃当前的缓存重新计算）
+ - 返回值：两点间的最短路径长度
+
+### bool isIsolated(unsigned int v) const
+ - 判断一个节点是否与其它节点都不连接
+ - `v`:要判断的节点
+ - 返回值：该节点是否孤立
+
+### int getEdgeNum() const
+ - 得到该图边的总数
+ - 返回值：该图边的总数
+
+### bool isPlanar()
+ - 判断该图是否是对偶图
+ - 返回值：该图是否是对偶图
 
 test
 ----------
